@@ -1,49 +1,66 @@
 #include <stdio.h>
-#include <ctype.h>
 #include <stdlib.h>
 
+int is_valid_int(char *s);
+
 /**
- * main - adds positive numbers & prints the result
- * @argc: number of arguments passed to main
- * @argv: array of arguments (strings) passed to main
- * Return: 0 if successful, otherwise 1
+ * main - adds positive numbers
+ * @argc: number of commandline arguments
+ * @argv: list of commandline arguments
+ *
+ * Description:
+ * - If no number is passed to the program, print 0, followed by a new line
+ * - If one of the number contains symbols that are not digits, print Error,
+ * followed by a new line, and return 1
+ *
+ * Return: 0 if successful. 1 if error
  */
-
-int main(int argc, char *argv[])
+int main(int argc, char **argv)
 {
-	int i, res = 0, flag = 0;
+	int i;
+	int total = 0;
 
-	if (argc <= 1)
-		res = 0;
-
-	else
+	/* if no other arguments are passed */
+	if (argc < 2)
 	{
-		for (i = 1; i < argc; i++)
-		{
-			if (!(isdigit(*argv[i])))
-			{
-				flag = 1;
-			}
+		printf("%d\n", 0);
+		return (0);
+	}
 
-			res += atoi(&(*argv[i]));
+	for (i = 1; i < argc; i++)
+	{
+		/* check if the argument is a valid integer */
+		if (is_valid_int(argv[i]))
+		{
+			total += atoi(argv[i]);
+		}
+		else
+		{
+			printf("Error\n");
+			return (1);
 		}
 	}
 
-	if (flag == 1 && res != 0)
+	printf("%d\n", total);
+
+	return (0);
+}
+
+/**
+ * is_valid_int - checks if a string is a valid integer
+ * @s: string
+ *
+ * Return: 1 is s is a valid integer. 0 otherwise
+ */
+int is_valid_int(char *s)
+{
+	while (*s)
 	{
-		printf("Error\n");
-		return (1);
+		if (*s < '0' || *s > '9')
+			return (0);
+
+		s++;
 	}
 
-	else if (flag == 1 && res == 0)
-	{
-		printf("%d\n", res);
-		return (0);
-	}
-
-	else
-	{
-		printf("%d\n", res);
-		return (0);
-	}
+	return (1);
 }
